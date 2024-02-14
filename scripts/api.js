@@ -12,7 +12,7 @@ async function FetchData(url) {
     }
 }
 
-async function getTopRatedGames() {
+async function GetTopRatedGames() {
     const key = new URLSearchParams (`key=${apiKey}`);
     key.append("ordering", "-metacritic");
 
@@ -20,7 +20,17 @@ async function getTopRatedGames() {
     return games;
 }
 
+async function GetGamesBySearch(search) {
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("search", search);
+    key.append("page_size", "10");
+    key.append("ordering", "released");
+
+    const games = await FetchData(`${baseURL}/games?${key}`);
+    return games;
+}
+
 export {
-    getTopRatedGames
+    GetTopRatedGames, GetGamesBySearch,
 };
 

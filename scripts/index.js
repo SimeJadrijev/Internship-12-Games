@@ -1,10 +1,10 @@
 import { 
-    getTopRatedGames
+    GetTopRatedGames, GetGamesBySearch
 } from "./api.js";
 
-//  console.log(getTopRatedGames());
 
 const cardsContainer1 = document.querySelector("#task-1 .cards-container");
+const cardsContainer2 = document.querySelector("#task-2 .cards-container");
 
 function CreateCard(game) {
     return `
@@ -35,6 +35,26 @@ function AddCards(games, container) {
     }
 }
 
-getTopRatedGames().then((games) => {
+//1st task
+GetTopRatedGames().then((games) => {
     AddCards(games, cardsContainer1)
 });
+
+
+//2nd task
+
+const secondTaskButton = document.querySelector("#task-2 button");
+secondTaskButton.addEventListener("click", async() => ActivateSecondTask());
+
+function ActivateSecondTask() {
+    const userInputElement = document.querySelector(".user-search");
+    userInputElement.classList.add("card-text");
+    const userInput = prompt("Which game do you want to search?");
+    userInputElement.textContent = `You searched for: ${userInput}`;
+
+    GetGamesBySearch(userInput).then((games) => {
+        AddCards(games, cardsContainer2)
+    })
+}
+
+
