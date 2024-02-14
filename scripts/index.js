@@ -47,7 +47,7 @@ const secondTaskButton = document.querySelector("#task-2 button");
 secondTaskButton.addEventListener("click", async() => ActivateSecondTask());
 
 function ActivateSecondTask() {
-    const userInputElement = document.querySelector(".user-search");
+    const userInputElement = document.querySelector("#task-2 .user-search");
     userInputElement.classList.add("card-text");
     const userInput = prompt("Which game do you want to search?");
     userInputElement.textContent = `You searched for: ${userInput}`;
@@ -56,5 +56,7 @@ function ActivateSecondTask() {
         AddCards(games, cardsContainer2)
     })
 }
+
+
 
 
