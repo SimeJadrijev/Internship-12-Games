@@ -30,7 +30,15 @@ async function GetGamesBySearch(search) {
     return games;
 }
 
+//3rd task skipped for now
+
+async function GetGameRating(gameID){
+    const key = new URLSearchParams (`key=${apiKey}`);
+    const game = await FetchData(`${baseURL}/games/${gameID}?${key}`);
+    return game;
+}
+
 export {
-    GetTopRatedGames, GetGamesBySearch,
+    GetTopRatedGames, GetGamesBySearch, GetGameRating
 };
 

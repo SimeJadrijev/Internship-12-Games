@@ -1,10 +1,12 @@
 import { 
-    GetTopRatedGames, GetGamesBySearch
+    GetTopRatedGames, GetGamesBySearch, GetGameRating
 } from "./api.js";
 
 
 const cardsContainer1 = document.querySelector("#task-1 .cards-container");
 const cardsContainer2 = document.querySelector("#task-2 .cards-container");
+const cardsContainer3 = document.querySelector("#task-3 .cards-container");
+const cardsContainer4 = document.querySelector("#task-4 .cards-container")
 
 function CreateCard(game) {
     return `
@@ -56,6 +58,50 @@ function ActivateSecondTask() {
         AddCards(games, cardsContainer2)
     })
 }
+
+//3rd task
+//skipped for now
+
+//4th task
+
+const fourthTaskButton = document.querySelector("#task-4 button");
+fourthTaskButton.addEventListener("click", async => ActivateFourthTask());
+
+function ActivateFourthTask() {
+
+    const gameID = prompt("Enter a game ID to get its details");
+    GetGameRating(gameID).then((game) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = CreateCard(game);
+        CreateStars(game.metacritic, card);
+        cardsContainer4.appendChild(card);
+        
+    })
+
+    
+}
+
+function CreateStars(rating, card) {
+    
+    const ratingContainer = document.createElement("div");
+    ratingContainer.classList.add("rating-container");
+    
+    rating = Math.round(rating);
+    let counter = 1;
+
+    while (counter <= rating) {
+        const star = document.createElement("img");
+        star.src = "./assets/star-regular.svg";
+        ratingContainer.appendChild(star);
+
+        counter++;
+    }   
+
+    card.appendChild(ratingContainer);
+}
+
+
 
 
 
