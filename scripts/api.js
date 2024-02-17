@@ -5,8 +5,17 @@ async function FetchData(url) {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data);
         return data.results;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function FetchSingleData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error(error);
     }
@@ -34,7 +43,7 @@ async function GetGamesBySearch(search) {
 
 async function GetGameRating(gameID){
     const key = new URLSearchParams (`key=${apiKey}`);
-    const game = await FetchData(`${baseURL}/games/${gameID}?${key}`);
+    const game = await FetchSingleData(`${baseURL}/games/${gameID}?${key}`);
     return game;
 }
 

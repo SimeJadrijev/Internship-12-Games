@@ -9,6 +9,8 @@ const cardsContainer3 = document.querySelector("#task-3 .cards-container");
 const cardsContainer4 = document.querySelector("#task-4 .cards-container")
 
 function CreateCard(game) {
+    console.log(game);
+    console.log(game.name);
     return `
     <h2 class="card-title">${game.name}</h2>
     <img src="${game.background_image}" alt="" class="card-image">
@@ -46,7 +48,7 @@ GetTopRatedGames().then((games) => {
 //2nd task
 
 const secondTaskButton = document.querySelector("#task-2 button");
-secondTaskButton.addEventListener("click", async() => ActivateSecondTask());
+secondTaskButton.addEventListener("click", () => ActivateSecondTask());
 
 function ActivateSecondTask() {
     const userInputElement = document.querySelector("#task-2 .user-search");
@@ -65,7 +67,7 @@ function ActivateSecondTask() {
 //4th task
 
 const fourthTaskButton = document.querySelector("#task-4 button");
-fourthTaskButton.addEventListener("click", async => ActivateFourthTask());
+fourthTaskButton.addEventListener("click", () => ActivateFourthTask());
 
 function ActivateFourthTask() {
 
@@ -87,20 +89,34 @@ function CreateStars(rating, card) {
     const ratingContainer = document.createElement("div");
     ratingContainer.classList.add("rating-container");
     
-    rating = Math.round(rating);
+    rating = Math.round( rating / 20 );
     let counter = 1;
 
     while (counter <= rating) {
-        const star = document.createElement("img");
-        star.src = "./assets/star-regular.svg";
-        ratingContainer.appendChild(star);
+        const coloredStar = document.createElement("img");
+        coloredStar.src = "./assets/star-solid.svg";
+        ratingContainer.appendChild(coloredStar);
 
         counter++;
-    }   
+    }  
+    
+    while (counter < 6) {
+        const normalStar = document.createElement("img");
+        normalStar.src = "./assets/star-regular.svg";
+        ratingContainer.appendChild(normalStar);
+        counter++;
+    }
 
     card.appendChild(ratingContainer);
 }
 
+//5th task
+
+// const gameID = prompt("Enter a game ID to get its stores");
+// GetGameRating(gameID).then((game) => {
+//     const stores = game.stores;
+//     console.log(stores);
+// })
 
 
 
