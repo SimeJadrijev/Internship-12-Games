@@ -55,7 +55,18 @@ async function GetDevelopers() {
     return developers;
 }
 
+async function GetGamesByDeveloper(developer) {
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("developers", developer);
+    key.append("page_size", "10");
+    key.append("ordering", "-metacritic");
+
+    const games = await FetchData(`${baseURL}/games?${key}`);
+    return games;
+}
+
 export {
-    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers
+    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
+    GetGamesByDeveloper
 };
 

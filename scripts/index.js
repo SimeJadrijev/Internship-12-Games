@@ -1,5 +1,6 @@
 import { 
-    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers
+    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
+    GetGamesByDeveloper
 } from "./api.js";
 
 
@@ -8,6 +9,7 @@ const cardsContainer2 = document.querySelector("#task-2 .cards-container");
 const cardsContainer3 = document.querySelector("#task-3 .cards-container");
 const cardsContainer4 = document.querySelector("#task-4 .cards-container")
 const cardsContainer5 = document.querySelector("#task-5 .cards-container");
+const cardsContainer6 = document.querySelector("#task-6 .cards-container");
 
 // universal functions
 function CreateCard(game) {
@@ -185,18 +187,43 @@ const ConvertToSlugFormat = (name) => {
 
 //6th task
 
-const developers = await GetDevelopers();
-const developerSlugs = developers.map((developer) => developer.slug);
-const developerNames = developers.map((developer) => developer.name);
-
-const message = `top 10 developers: \n 
-                ${developerNames.join(", ")} \n
-                Choose developers (separated by commas)`;
-
-const selectedDevelopers = InputSeparatedByCommas(message);
-const selectedSlugs = selectedDevelopers.map(dev => ConvertToSlugFormat(dev));
-console.log(selectedSlugs);
+const sixthTaskButton = document.querySelector("#task-6 button");
+sixthTaskButton.addEventListener("click", () => ActivateSixthTask());
 
 
+async function ActivateSixthTask() {
+    
+    const developers = await GetDevelopers();
+    const developerSlugs = developers.map((developer) => developer.slug);
+    const developerNames = developers.map((developer) => developer.name);
+
+    const message = 
+    `top 10 developers: \n
+    ${developerNames.join(", ")} \n
+    Choose developers (separated by commas)`;
+
+    const selectedDevelopers = InputSeparatedByCommas(message);
+    const selectedSlugs = selectedDevelopers.map(dev => ConvertToSlugFormat(dev));
+
+    const listOfGamesByEachDev = [];
+
+    for (const dev of selectedSlugs){
+        const gamesByDev = await GetGamesByDeveloper(dev);
+        listOfGamesByEachDev.push( {name: dev, games: gamesByDev} );
+    }
+
+    for (const dev of listOfGamesByEachDev){
+        const devGamesContainer = document.createElement("div");
+        devGamesContainer.classList.add("dev-heading");
+        devGamesContainer.innerHTML = `<h2>${dev.name}</h2>`;
+
+        const cardsContainer = document.createElement("div");
+        cardsContainer.classList.add("cards-container");
+
+        AddCards(dev.games, cardsContainer);
+        devGamesContainer.append(cardsContainer);
+        cardsContainer6.append(devGamesContainer);
+    }
+}
 
 
