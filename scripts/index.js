@@ -1,6 +1,7 @@
 import { 
     GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
-    GetGamesByDeveloper, GetGamesByDateRange, GetGameyByRatingRange
+    GetGamesByDeveloper, GetGamesByDateRange, GetGameyByRatingRange,
+    GetGamesByPlatform, GetPlatforms
 } from "./api.js";
 
 
@@ -135,6 +136,15 @@ function InputRating (message) {
     }
 }
 
+function GetPlatformIDs(platformNames, selectedPlatforms) {
+    
+    const platformIDs = selectedPlatforms.map ( (platform) => {
+        return platformNames.find( (platformName) => 
+                                platformName.name === platform).id;
+    });
+    return platformIDs.join(",");
+}
+
 //1st task
 GetTopRatedGames().then((games) => {
     AddCards(games, cardsContainer1)
@@ -158,7 +168,28 @@ function ActivateSecondTask() {
 }
 
 //3rd task
-//skipped for now
+
+const thirdTaskButton = document.querySelector("#task-3 button");
+thirdTaskButton.addEventListener("click", () => ActivateThirdTask());
+
+async function ActivateThirdTask() {
+    const platforms = await GetPlatforms();
+    const platformNames = platforms.map((platform) => {return {id: platform.id, name: platform.name}});
+
+    const message =
+    `top 10 platforms: \n
+    ${platformNames
+        .map((platform) => platform.name)
+        .join(", ")} \n
+    Choose platforms (separated by commas)`;
+
+    const selectedPlatformNames = InputSeparatedByCommas(message);
+    const platformIDs = GetPlatformIDs(platformNames, selectedPlatformNames);
+
+    const gamesByPlatform = await GetGamesByPlatform(platformIDs);
+    AddCards(gamesByPlatform, cardsContainer3);
+}
+
 
 //4th task
 

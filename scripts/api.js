@@ -39,8 +39,6 @@ async function GetGamesBySearch(search) {
     return games;
 }
 
-//3rd task skipped for now
-
 async function GetGameRating(gameID){
     const key = new URLSearchParams (`key=${apiKey}`);
     const game = await FetchSingleData(`${baseURL}/games/${gameID}?${key}`);
@@ -85,8 +83,29 @@ async function GetGameyByRatingRange (firstRating, secondRating){
     return games;
 }
 
+async function GetPlatforms() {
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("page_size", "10");
+    key.append("ordering", "-games_count");
+    
+    const games = await FetchData(`${baseURL}/platforms?${key}`);
+    return games;
+}
+
+async function GetGamesByPlatform(platformIDs) {
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("platforms", platformIDs);
+    key.append("page_size", "20");
+    key.append("metacritic", "50,100");
+    key.append("ordering", "name");
+
+    const games = await FetchData(`${baseURL}/games?${key}`);
+    return games;
+}
+
 export {
     GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
-    GetGamesByDeveloper, GetGamesByDateRange, GetGameyByRatingRange
+    GetGamesByDeveloper, GetGamesByDateRange, GetGameyByRatingRange,
+    GetGamesByPlatform, GetPlatforms
 };
 
