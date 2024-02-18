@@ -1,6 +1,6 @@
 import { 
     GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
-    GetGamesByDeveloper, GetGamesByDateRange
+    GetGamesByDeveloper, GetGamesByDateRange, GetGameyByRatingRange
 } from "./api.js";
 
 
@@ -11,6 +11,8 @@ const cardsContainer4 = document.querySelector("#task-4 .cards-container")
 const cardsContainer5 = document.querySelector("#task-5 .cards-container");
 const cardsContainer6 = document.querySelector("#task-6 .cards-container");
 const cardsContainer7 = document.querySelector("#task-7 .cards-container");
+const cardsContainer8 = document.querySelector("#task-8 .cards-container");
+
 
 // universal functions
 function CreateCard(game) {
@@ -120,9 +122,17 @@ function InputDate(message) {
             continue;
 
         return date;
-    }
+    }  
+}
 
-    
+function InputRating (message) {
+   
+    while (true) {
+        let rating = +prompt(`${message}`);
+
+        if (!isNaN(rating) && rating <= 100 && rating >=0)
+            return rating;
+    }
 }
 
 //1st task
@@ -277,5 +287,24 @@ async function ActivateSeventhTask (){
 }
 
 
+//8th task
 
+const eighthTaskButton = document.querySelector("#task-8 button");
+eighthTaskButton.addEventListener("click", () => ActivateEighthTask());
+
+
+async function ActivateEighthTask () {
+    const firstRating = InputRating("Unesite prvi rating (0-100)");
+    let secondRating;
+    while (true) {
+        secondRating = InputRating(`Unesite drugi rating (${firstRating}-100)`);
+        
+        if (secondRating >= firstRating)
+            break;
+        alert(`Invalid input! (The second rating has to be equal or greater than ${firstRating}`);
+    }
+
+    const gamesByRatingRange = await GetGameyByRatingRange(firstRating, secondRating);
+    AddCards(gamesByRatingRange, cardsContainer8);
+}
 
