@@ -1,6 +1,6 @@
 import { 
     GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
-    GetGamesByDeveloper
+    GetGamesByDeveloper, GetGamesByDateRange
 } from "./api.js";
 
 
@@ -10,6 +10,7 @@ const cardsContainer3 = document.querySelector("#task-3 .cards-container");
 const cardsContainer4 = document.querySelector("#task-4 .cards-container")
 const cardsContainer5 = document.querySelector("#task-5 .cards-container");
 const cardsContainer6 = document.querySelector("#task-6 .cards-container");
+const cardsContainer7 = document.querySelector("#task-7 .cards-container");
 
 // universal functions
 function CreateCard(game) {
@@ -78,6 +79,50 @@ function CreateStoreCard(store) {
         </span>
      </p>
     `
+}
+
+const InputSeparatedByCommas = (message) => {
+    const userInput = prompt(`${message}`);
+    const userInputArray = userInput.split(",");
+    const result = userInputArray.map(el => el.trim());
+    return result;
+}
+
+const ConvertToSlugFormat = (name) => {
+    if (name.includes(" "))
+    {
+        const separatedWords = name.split(" ");
+        const slug = separatedWords.join("-");
+        return slug.toLowerCase();
+    }
+    return name.toLowerCase();
+}
+
+function InputDate(message) {
+    
+    while (true) {
+        let date = prompt(`${message}`);
+
+        if (date.length !== 10)
+            continue;
+        
+        const parts = date.split("-");
+        if (parts.length !== 3)
+            continue;
+
+        const year = parseInt(parts[0]);
+        const month = parseInt(parts[1]);
+        const day = parseInt(parts[2]);
+
+        if (isNaN(year) || isNaN(month) || isNaN(day))
+            continue;
+        if (year > 2024 || month < 1 || month > 12 || day < 1 || day > 31)
+            continue;
+
+        return date;
+    }
+
+    
 }
 
 //1st task
@@ -167,23 +212,6 @@ function ActivateFifthTask() {
         cardsContainer5.appendChild(card);
     })
 }
-///////
-const InputSeparatedByCommas = (message) => {
-    const userInput = prompt(`${message}`);
-    const userInputArray = userInput.split(",");
-    const result = userInputArray.map(el => el.trim());
-    return result;
-}
-
-const ConvertToSlugFormat = (name) => {
-    if (name.includes(" "))
-    {
-        const separatedWords = name.split(" ");
-        const slug = separatedWords.join("-");
-        return slug.toLowerCase();
-    }
-    return name.toLowerCase();
-}
 
 //6th task
 
@@ -225,5 +253,29 @@ async function ActivateSixthTask() {
         cardsContainer6.append(devGamesContainer);
     }
 }
+
+//7th task
+
+const seventhTaskButton = document.querySelector("#task-7 button");
+seventhTaskButton.addEventListener("click", () => ActivateSeventhTask());
+
+async function ActivateSeventhTask (){
+
+    const startDate = InputDate("Enter the starting date (format: yyyy-mm-dd)");
+    let endDate;
+    while (true) {
+        endDate = InputDate("Enter the ending date (format: yyyy-mm-dd)");
+
+        if (Date.parse(endDate) > Date.parse(startDate))
+            break;
+
+        alert(`Invalid input! (The ending date has to be after the starting date (${startDate})!`);
+    }
+
+    const gamesByDate = await GetGamesByDateRange(startDate, endDate);
+    AddCards(gamesByDate, cardsContainer7);
+}
+
+
 
 

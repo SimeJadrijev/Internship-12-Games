@@ -65,8 +65,18 @@ async function GetGamesByDeveloper(developer) {
     return games;
 }
 
+async function GetGamesByDateRange(startDate, endDate){
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("dates", `${startDate},${endDate}`);
+    key.append("page_size", "10");
+    key.append("ordering", "-metacritic");
+
+    const games = await FetchData(`${baseURL}/games?${key}`);
+    return games;
+}
+
 export {
     GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers,
-    GetGamesByDeveloper
+    GetGamesByDeveloper, GetGamesByDateRange
 };
 
