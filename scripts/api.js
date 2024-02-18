@@ -47,7 +47,15 @@ async function GetGameRating(gameID){
     return game;
 }
 
+async function GetDevelopers() {
+    const key = new URLSearchParams (`key=${apiKey}`);
+    key.append("page_size", "10");
+
+    const developers = await FetchData(`${baseURL}/developers?${key}`);
+    return developers;
+}
+
 export {
-    GetTopRatedGames, GetGamesBySearch, GetGameRating
+    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers
 };
 

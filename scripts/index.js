@@ -1,5 +1,5 @@
 import { 
-    GetTopRatedGames, GetGamesBySearch, GetGameRating
+    GetTopRatedGames, GetGamesBySearch, GetGameRating, GetDevelopers
 } from "./api.js";
 
 
@@ -67,7 +67,7 @@ function CreateStars(rating, card) {
 
 function CreateStoreCard(store) {
     return `
-    <h2 class="card-title">Store name: ${store.store.name}</h2>
+    <h2 class="card-title">${store.store.name}</h2>
     <img src="${store.store.image_background}" alt="" class="card-image">
      <p class="card-text">
         Number of games: 
@@ -165,7 +165,37 @@ function ActivateFifthTask() {
         cardsContainer5.appendChild(card);
     })
 }
+///////
+const InputSeparatedByCommas = (message) => {
+    const userInput = prompt(`${message}`);
+    const userInputArray = userInput.split(",");
+    const result = userInputArray.map(el => el.trim());
+    return result;
+}
 
+const ConvertToSlugFormat = (name) => {
+    if (name.includes(" "))
+    {
+        const separatedWords = name.split(" ");
+        const slug = separatedWords.join("-");
+        return slug.toLowerCase();
+    }
+    return name.toLowerCase();
+}
+
+//6th task
+
+const developers = await GetDevelopers();
+const developerSlugs = developers.map((developer) => developer.slug);
+const developerNames = developers.map((developer) => developer.name);
+
+const message = `top 10 developers: \n 
+                ${developerNames.join(", ")} \n
+                Choose developers (separated by commas)`;
+
+const selectedDevelopers = InputSeparatedByCommas(message);
+const selectedSlugs = selectedDevelopers.map(dev => ConvertToSlugFormat(dev));
+console.log(selectedSlugs);
 
 
 
